@@ -10,7 +10,9 @@ const App = () => {
   const [rooms, setRooms] = useState([]); // room list
   const [join, setJoin] = useState(null); // 내가 join한 room
 
-  const onLeaveRoom = () => {};
+  const onLeaveRoom = () => {
+    socket.emit("leave-room", join, () => setJoin(null));
+  };
 
   const onJoin = roomName => {
     socket.emit("join-room", roomName, () => setJoin(roomName));
@@ -41,6 +43,10 @@ const App = () => {
 
   useEffect(() => {
     socket.on("connect", () => {
+      socket.on("remove-room", roomName => {
+        setRooms(prev => prev.filter(item => item !== roomName));
+      });
+
       socket.on("updateRooms", newRooms => {
         setRooms(newRooms);
       });

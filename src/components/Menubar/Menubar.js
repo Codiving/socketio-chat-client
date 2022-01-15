@@ -11,6 +11,7 @@ const Menubar = props => {
           onSubmit={e => {
             e.preventDefault();
             onSuccessCreateRoom(roomName);
+            setRoomName("");
           }}
         >
           <input

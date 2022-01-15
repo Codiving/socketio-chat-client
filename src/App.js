@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-import { Login, Menubar } from "./components";
-import ChatRoom from "./components/ChatRoom";
+import { Chat, ChatRoom, Login, Menubar } from "./components";
 
 const socket = io.connect("/");
 
@@ -10,6 +9,8 @@ const App = () => {
   const [nickname, setNickname] = useState("");
   const [rooms, setRooms] = useState([]); // room list
   const [join, setJoin] = useState(null); // 내가 join한 room
+
+  const onLeaveRoom = () => {};
 
   const onJoin = roomName => {
     socket.emit("join-room", roomName, () => setJoin(roomName));
@@ -58,12 +59,22 @@ const App = () => {
       {login && (
         <div>
           <p>로그인 성공했습니다.</p>
-          <Menubar onSuccessCreateRoom={onSuccessCreateRoom} />
+          <Menubar
+            onSuccessCreateRoom={onSuccessCreateRoom}
+            join={join}
+            onLeaveRoom={onLeaveRoom}
+          />
           <div>
-            {rooms.map((room, index) => (
-              <ChatRoom key={index} roomName={room} onJoin={onJoin} />
-            ))}
+            {!Boolean(join) &&
+              rooms.map((room, index) => (
+                <ChatRoom key={index} roomName={room} onJoin={onJoin} />
+              ))}
           </div>
+          {join && (
+            <div>
+              <Chat roomName={join} />
+            </div>
+          )}
         </div>
       )}
     </div>

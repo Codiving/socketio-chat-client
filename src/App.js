@@ -72,7 +72,7 @@ const App = () => {
           </div>
           {join && (
             <div>
-              <Chat roomName={join} />
+              <Chat roomName={join} socket={socket} />
             </div>
           )}
         </div>

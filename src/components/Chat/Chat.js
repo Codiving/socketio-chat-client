@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Chat = props => {
-  const { roomName } = props;
+  const { roomName, socket } = props;
   const [chat, setChat] = useState("");
   const [list, setList] = useState([]); // 채팅 텍스트 list
+
+  useEffect(() => {
+    socket.on("join-msg", msg => {
+      alert(msg);
+    });
+  }, [socket]);
 
   return (
     <div>
